@@ -1,22 +1,14 @@
 #include <FastLED.h>
+#include "char_arrays.h"
 
 #define LED_PIN     13
 #define NUM_LEDS    64
 #define COLOR_ORDER GRB
 
-#define BASE_BRIGHTNESS 64
-#define RDCT_BRIGHTNESS 230
+#define BASE_BRIGHTNESS 48
+#define REDUCE_BRIGHTNESS 240
 
 CRGB leds[NUM_LEDS];
-
-int ar_8[64] = {0, 0, 0, 1, 1, 0, 0, 0,
-                0, 0, 1, 0, 0, 1, 0, 0,
-                0, 0, 1, 0, 0, 1, 0, 0,
-                0, 0, 0, 1, 1, 0, 0, 0,
-                0, 0, 1, 0, 0, 1, 0, 0,
-                0, 0, 1, 0, 0, 1, 0, 0,
-                0, 0, 0, 1, 1, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0,};
 
 /**
  * Set the LED at a given position
@@ -24,7 +16,7 @@ int ar_8[64] = {0, 0, 0, 1, 1, 0, 0, 0,
 void setLED(int pos, CRGB col)
 {
   leds[pos] = col;
-  leds[pos].fadeLightBy(ar_8[pos] * RDCT_BRIGHTNESS);
+  leds[pos].fadeLightBy(ar_0[pos] * REDUCE_BRIGHTNESS);
 }
 
 void setup()
@@ -42,7 +34,7 @@ void loop()
 {
   for(int i=0; i<NUM_LEDS; i++)
   {
-    setLED(i, CRGB::Blue);
+    setLED(i, CRGB::Green);
 
     FastLED.show();
   }
