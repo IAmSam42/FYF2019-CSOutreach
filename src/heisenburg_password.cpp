@@ -1,8 +1,9 @@
 #include <FastLED.h>
 #include <cstring>
 #include <stdlib.h>
-#include "char_arrays.h"
 
+#include "Char_arrays.h"
+#include "Animator.h"
 
 //Circuit configuration, doesn't need to be modified
 #define LED_PIN     13
@@ -12,10 +13,10 @@
 #define COLOR_ORDER GRB
 
 //Set the base brightness of the LEDs
-#define BASE_BRIGHTNESS 32
+#define BASE_BRIGHTNESS 64
 //How much the 'used' LEDs are reduced in brightness. Measured as a fraction
 //out of 255  - adjust to change "difficulty"
-#define REDUCE_BRIGHTNESS 255
+#define REDUCE_BRIGHTNESS 240
 
 //Number of LED panels
 
@@ -29,6 +30,9 @@ CRGB leds[NUM_LEDS];
 
 //Variable to store the "mask" that encodes the desired patterns
 int mask[NUM_LEDS] = {0};
+
+//Animator to create the effects.
+Animator animator(BASE_BRIGHTNESS);
 
 
 /**
@@ -83,6 +87,8 @@ void setup()
 
 
   srand(time(NULL));
+
+  Serial.begin(9600);
 }
 
 
@@ -107,16 +113,14 @@ void loop()
   for(int i=0; i<(NUM_LEDS); i++)
   {
     //Set the colour to green
-    setLED(i, CRGB::Green);
+    setLED(i, animator.getColour(i));
   }
 
   //Update the panel
   FastLED.show();
 
-  //Brief delay, then change the code and make a new mask
-  delay(500);
-  code[0] = rand()%10;
-  code[1] = rand()%10;
+  //Update the animation:
+  animator.update();
 
   createMask();
 }
