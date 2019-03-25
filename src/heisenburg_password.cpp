@@ -84,11 +84,6 @@ void setup()
 
   //Create the mask to show the code
   createMask();
-
-
-  srand(time(NULL));
-
-  Serial.begin(9600);
 }
 
 
