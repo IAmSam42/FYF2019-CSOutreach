@@ -10,9 +10,10 @@ class Animator
 {
   public:
     Animator(int brightness);
-    CRGB getColour(int pos);
+    CRGB getPanelRainbow(int pos);
+    CRGB getMovingRainbow(int pos);
+    CRGB getMovingStripes(int pos);
     void update();
-
 };
 
 #endif

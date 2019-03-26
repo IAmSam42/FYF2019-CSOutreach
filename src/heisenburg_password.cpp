@@ -7,7 +7,7 @@
 
 //Circuit configuration, doesn't need to be modified
 #define LED_PIN     13
-#define NUM_PANELS  2
+#define NUM_PANELS  4
 #define LEDS_PER_PANEL 64
 #define NUM_LEDS    NUM_PANELS*LEDS_PER_PANEL
 #define COLOR_ORDER GRB
@@ -16,14 +16,14 @@
 #define BASE_BRIGHTNESS 64
 //How much the 'used' LEDs are reduced in brightness. Measured as a fraction
 //out of 255  - adjust to change "difficulty"
-#define REDUCE_BRIGHTNESS 240
+#define REDUCE_BRIGHTNESS 220
 
 //Number of LED panels
 
 
 
 //Set the code to be displayed on the panels
-int code[NUM_PANELS] = {0, 8};
+int code[NUM_PANELS] = {0, 8, 2, 6};
 
 //Variable to store colour of every individual LED
 CRGB leds[NUM_LEDS];
@@ -104,11 +104,15 @@ void setLED(int pos, CRGB col)
 
 void loop()
 {
-  //Go through every LED:
-  for(int i=0; i<(NUM_LEDS); i++)
+  //Go through every panel:
+  for(int p=0; p<NUM_PANELS; p++)
   {
-    //Set the colour to green
-    setLED(i, animator.getColour(i));
+    //Go through every LED on that panel:
+    for(int i=0; i<LEDS_PER_PANEL; i++)
+    {
+      //Set the colour based on the animator:
+      setLED(i+(p*LEDS_PER_PANEL), animator.getMovingRainbow(i));
+    }
   }
 
   //Update the panel
