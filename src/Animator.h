@@ -13,6 +13,8 @@ class Animator
     CRGB getPanelRainbow(int pos);
     CRGB getMovingRainbow(int pos);
     CRGB getMovingStripes(int pos);
+    CRGB getMovingLines(int pos);
+    CRGB getGameOfLife(int pos);
     void update();
 };
 

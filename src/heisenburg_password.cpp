@@ -84,6 +84,8 @@ void setup()
 
   //Create the mask to show the code
   createMask();
+
+  Serial.begin(9600);
 }
 
 
@@ -111,7 +113,7 @@ void loop()
     for(int i=0; i<LEDS_PER_PANEL; i++)
     {
       //Set the colour based on the animator:
-      setLED(i+(p*LEDS_PER_PANEL), animator.getMovingRainbow(i));
+      setLED(i+(p*LEDS_PER_PANEL), animator.getGameOfLife(i));
     }
   }
 
