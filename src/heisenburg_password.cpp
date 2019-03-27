@@ -16,10 +16,7 @@
 #define BASE_BRIGHTNESS 64
 //How much the 'used' LEDs are reduced in brightness. Measured as a fraction
 //out of 255  - adjust to change "difficulty"
-#define REDUCE_BRIGHTNESS 220
-
-//Number of LED panels
-
+#define REDUCE_BRIGHTNESS 200
 
 
 //Set the code to be displayed on the panels
@@ -106,16 +103,24 @@ void setLED(int pos, CRGB col)
 
 void loop()
 {
-  //Go through every panel:
-  for(int p=0; p<NUM_PANELS; p++)
+  //Go through every LED on a panel:
+  for(int i=0; i<LEDS_PER_PANEL; i++)
   {
-    //Go through every LED on that panel:
-    for(int i=0; i<LEDS_PER_PANEL; i++)
-    {
-      //Set the colour based on the animator:
-      setLED(i+(p*LEDS_PER_PANEL), animator.getMovingRainbo(i));
-    }
+    //Each panel has it's own animator method:
+
+    //Panel 1:
+    setLED(i, animator.getPanelRainbow(i));
+
+    //Panel 2:
+    setLED(i + 64, animator.getMovingStripes(i));
+
+    //Panel 3:
+    setLED(i + 128, animator.getMovingLines(i));
+
+    //Panel 3:
+    setLED(i + 192, animator.getGameOfLife(i));
   }
+
 
   //Update the panel
   FastLED.show();
