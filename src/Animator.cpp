@@ -34,11 +34,13 @@ Animator::Animator(int i_brightness)
  */
 CRGB Animator::getMovingRainbow(int pos)
 {
+  //Get the index of the pixel. Increasting the pos mutiplier shows more of the
+  //spectrum
   int index = startIndex + (pos*3);
 
-  CRGB col = ColorFromPalette(RainbowColors_p, index, brightness, LINEARBLEND);
 
-  return col;
+  //Return the colour from the rainbox palette
+  return ColorFromPalette(RainbowColors_p, index, brightness, LINEARBLEND);
 }
 
 /**
@@ -47,11 +49,12 @@ CRGB Animator::getMovingRainbow(int pos)
  */
 CRGB Animator::getPanelRainbow(int pos)
 {
+  //Get the index, by not using the LED position we get a constant colours
+  //accross the panel
   int index = startIndex;
 
-  CRGB col = ColorFromPalette(RainbowColors_p, index, brightness, LINEARBLEND);
-
-  return col;
+  //Get the colour from the rainbox palette
+  return ColorFromPalette(RainbowColors_p, index, brightness, LINEARBLEND);
 }
 
 /**
@@ -59,22 +62,31 @@ CRGB Animator::getPanelRainbow(int pos)
  */
 CRGB Animator::getMovingStripes(int pos)
 {
+  //Get the index of the pixel. Increasting the pos mutiplier shows more stripes
   int index = startIndex  + (pos*3);
 
-  CRGB col = ColorFromPalette(CloudColors_p, index, brightness, LINEARBLEND);
-
-  return col;
+  //Get the colour from the clour pallette
+  return ColorFromPalette(CloudColors_p, index, brightness, LINEARBLEND);
 }
 
+/**
+ * Display random lines dropping down over the screen. The lines are green and
+ * have a tail that slowly fades out
+ */
 CRGB Animator::getMovingLines(int pos)
 {
   //Get the x and y coordinate of pos:
   int x = pos % 8;
   int y = pos / 8;
 
+  //return the colour from the line colour array
   return lineColours[x][y];
 }
 
+/**
+ * Display Conways Game of Life. When there are no live cells left the grid will
+ * repolulate, but a restart will be needed if the grid enters a stable state
+ */
 CRGB Animator::getGameOfLife(int pos)
 {
   //Get the x and y coordinate of pos:
@@ -94,6 +106,10 @@ CRGB Animator::getGameOfLife(int pos)
   }
 }
 
+
+/**
+ *  Update the random line to create trailing patterns down the LED screen.
+ */
 void updateLines()
 {
   //Don't update on every cycle:
@@ -160,6 +176,10 @@ void updateLines()
   }
 }
 
+
+/**
+ *  Randomly repopulate the Game of Life array with living cells
+ */
 void repopulate()
 {
   //Go through the whole world:
@@ -177,7 +197,10 @@ void repopulate()
   }
 }
 
-
+/**
+ * For a given x,y position, calculate the number of neighbours of a cell in
+ * the Game of Life world array.
+ */
 int lifeNeighbours(int x, int y)
 {
   int neighbours = 0;
@@ -204,10 +227,12 @@ int lifeNeighbours(int x, int y)
   return neighbours;
 }
 
+
+/**
+ *  Update the game of life world, according to the rules of the game.
+ */
 void updateLife()
 {
-  Serial.println();
-
   //Don't update on every cycle:
   if((startIndex%50)!=0)
   {
@@ -268,15 +293,16 @@ void updateLife()
     }
   }
 
+  //Replace the old world with the new one.
   memcpy(world, newWorld, sizeof(world));
 }
 
 void Animator::update()
 {
+  //Increment the start index, used for animation
   startIndex++;
 
+  //Update the state of the random lines and the game of life grid
   updateLines();
   updateLife();
-
-  return;
 }

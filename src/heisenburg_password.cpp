@@ -2,7 +2,7 @@
 #include <cstring>
 #include <stdlib.h>
 
-#include "Char_arrays.h"
+#include "char_arrays.h"
 #include "Animator.h"
 
 //Circuit configuration, doesn't need to be modified
@@ -113,7 +113,7 @@ void loop()
     for(int i=0; i<LEDS_PER_PANEL; i++)
     {
       //Set the colour based on the animator:
-      setLED(i+(p*LEDS_PER_PANEL), animator.getGameOfLife(i));
+      setLED(i+(p*LEDS_PER_PANEL), animator.getMovingRainbo(i));
     }
   }
 
