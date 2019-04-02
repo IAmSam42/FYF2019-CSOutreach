@@ -16,11 +16,11 @@
 #define BASE_BRIGHTNESS 64
 //How much the 'used' LEDs are reduced in brightness. Measured as a fraction
 //out of 255  - adjust to change "difficulty"
-#define REDUCE_BRIGHTNESS 200
+#define REDUCE_BRIGHTNESS 230
 
 
 //Set the code to be displayed on the panels
-int code[NUM_PANELS] = {0, 8, 2, 6};
+int code[NUM_PANELS] = {8, 7, 2, 6};
 
 //Variable to store colour of every individual LED
 CRGB leds[NUM_LEDS];
@@ -28,7 +28,7 @@ CRGB leds[NUM_LEDS];
 //Variable to store the "mask" that encodes the desired patterns
 int mask[NUM_LEDS] = {0};
 
-//Animator to create the effects.
+//Make an animator for each panel:
 Animator animator(BASE_BRIGHTNESS);
 
 
@@ -112,7 +112,7 @@ void loop()
     setLED(i, animator.getPanelRainbow(i));
 
     //Panel 2:
-    setLED(i + 64, animator.getMovingStripes(i));
+    setLED(i + 64, animator.getRandomChar(i));
 
     //Panel 3:
     setLED(i + 128, animator.getMovingLines(i));
