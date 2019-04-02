@@ -14,6 +14,10 @@ int startIndex = 0;
 int lineHeads[8][8] = { 0 };
 CRGB lineColours[8][8];
 
+//Array to hold current char mask:
+int charMask[64] = { 0 };
+CRGB charColour = CRGB::Yellow; //Current colour of the character
+
 //Array to hold game of life simulation:
 int world[8][8] = { 0 };
 
@@ -84,6 +88,24 @@ CRGB Animator::getMovingLines(int pos)
 }
 
 /**
+ * Display a random character from 0-9 on the panel.
+ * The character has a random colour.
+ */
+CRGB Animator::getRandomChar(int pos)
+{
+  //Check if this pixel should be active
+  if(charMask[pos] == 1)
+  {
+    //Return the current char colour:
+    return charColour;
+  }
+  else //Else, return black
+  {
+    return CRGB::Black;
+  }
+}
+
+/**
  * Display Conways Game of Life. When there are no live cells left the grid will
  * repolulate, but a restart will be needed if the grid enters a stable state
  */
@@ -96,8 +118,9 @@ CRGB Animator::getGameOfLife(int pos)
   //If the cell is alive:
   if(world[x][y]==1)
   {
-    //Return a yellow colour:
-    return CRGB::Yellow;
+    CRGB col = CRGB::Yellow;
+
+    return col%=brightness;
   }
   //Else the cell is dead:
   else
@@ -174,6 +197,46 @@ void updateLines()
       }
     }
   }
+}
+
+/**
+ * Generate a new character and set the colour.
+ */
+void updateChar()
+{
+  //Don't update on every cycle:
+  if((startIndex%50)!=0)
+  {
+    return;
+  }
+
+  //Pick a random number from 0 - 9, then set that as the current mask:
+  switch (random(0, 9))
+  {
+    case 0 :  std::memcpy(charMask, ar_0, 64*sizeof(int));
+              break;
+    case 1 :  std::memcpy(charMask, ar_1, 64*sizeof(int));
+              break;
+    case 2 :  std::memcpy(charMask, ar_2, 64*sizeof(int));
+              break;
+    case 3 :  std::memcpy(charMask, ar_3, 64*sizeof(int));
+              break;
+    case 4 :  std::memcpy(charMask, ar_4, 64*sizeof(int));
+              break;
+    case 5 :  std::memcpy(charMask, ar_5, 64*sizeof(int));
+              break;
+    case 6 :  std::memcpy(charMask, ar_6, 64*sizeof(int));
+              break;
+    case 7 :  std::memcpy(charMask, ar_7, 64*sizeof(int));
+              break;
+    case 8 :  std::memcpy(charMask, ar_8, 64*sizeof(int));
+              break;
+    case 9 :  std::memcpy(charMask, ar_9, 64*sizeof(int));
+    default:  break;
+  }
+
+  //Pick a random colour for the character:
+  charColour = CHSV( random8(), 255, brightness);
 }
 
 
@@ -302,7 +365,8 @@ void Animator::update()
   //Increment the start index, used for animation
   startIndex++;
 
-  //Update the state of the random lines and the game of life grid
+  //Update the the random lines, the random character and the game of life grid
   updateLines();
+  updateChar();
   updateLife();
 }
