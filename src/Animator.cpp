@@ -4,6 +4,9 @@
 
 #include "Animator.h"
 
+//The maximum number of generations before the Game of Life world resets
+#define MAX_GENS 50
+
 //Store the brightness of the LEDs
 int brightness;
 
@@ -20,6 +23,7 @@ CRGB charColour = CRGB::Yellow; //Current colour of the character
 
 //Array to hold game of life simulation:
 int world[8][8] = { 0 };
+int genNumber = 0; //Number of generations of the current world.
 
 Animator::Animator(int i_brightness)
 {
@@ -312,11 +316,16 @@ void updateLife()
     }
   }
 
-  //If there are no live cells:
-  if(liveCells == 0)
+  //If there are no live cells, or the max number of generations have been
+  //reached
+  if((liveCells == 0) || (genNumber == MAX_GENS))
   {
     //Repopulate:
     repopulate();
+
+
+    //Reset the number of generations
+    genNumber = 0;
 
     return;
   }
@@ -358,6 +367,9 @@ void updateLife()
 
   //Replace the old world with the new one.
   memcpy(world, newWorld, sizeof(world));
+
+  //Increment the generation count:
+  genNumber++;
 }
 
 void Animator::update()
